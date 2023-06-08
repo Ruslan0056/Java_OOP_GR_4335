@@ -1,75 +1,73 @@
 
 import Domen.Product;
+// import VendingMachine.VendingMachine;
 
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
 
 
-    final public Font mainFont = new Font("Segoe print", Font.BOLD, 18);
+    final private Font mainFont = new Font("Segoe print", Font.BOLD, 18);
     JTextField tfProductName;
 
 
-    JLabel buyApprovement;
+    JLabel lbWelcome;
 
     public void initialize(List<Product> list) {
 
-        JLabel lbBoxList = new JLabel("Products list", SwingConstants.CENTER);
+        JLabel lbBoxList = new JLabel("Products list", 0);
         lbBoxList.setFont(mainFont);
         JLabel lbChooseProduct = new JLabel("Choose product");
         lbChooseProduct.setFont(mainFont);
-        JTextField tfMonyeInput = new JTextField();
+        JTextField tfChooseProduct = new JTextField();
         lbBoxList.setFont(mainFont);
         JLabel blank = new JLabel("");
 
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(50, 1, 25, 5));
+        formPanel.setLayout(new GridLayout(100, 1, 25, 5));
         formPanel.add(lbBoxList);
         formPanel.add(blank);
         String[] productsList = new String[list.size()];
-
+        
         //вывод всех товаров
-        for (Product product : list) {
-            JLabel lbProductNames = new JLabel(product.getProductName() + " " + product.getPrice() + " ₽", SwingConstants.LEADING);
+        for (int i = 0; i < list.size(); i++) {
+            JLabel lbProductNames = new JLabel(list.get(i).getProductName() + " " + list.get(i).getPrice()+ " ₽", 10);
             lbProductNames.setFont(mainFont);
             formPanel.add(lbProductNames);
         }
+        
 
-
-
+        
         for (int i = 0; i < list.size(); i++) {
             productsList[i] = list.get(i).getProductName();
         }
 
-        JComboBox<String> popUpList = new JComboBox<>(productsList);
+        JComboBox popUpList = new JComboBox<>(productsList);
 
 
 
         formPanel.add(blank);
         formPanel.add(lbChooseProduct);
         formPanel.add(popUpList);
-
-        JLabel lbChoice = new JLabel();
-        lbChoice.setFont(mainFont);
-        formPanel.add(lbChoice);
+        
+        JLabel lbChoose = new JLabel();
+        lbChoose.setFont(mainFont);
+        formPanel.add(lbChoose);
         popUpList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String productBuy = (String) popUpList.getSelectedItem();
-                Double productPrice = 0.0;
-                for (Product product : list) {
-                    if (Objects.equals(productBuy, product.getProductName())) productPrice = product.getPrice();
-                    lbChoice.setText("Selected product - " + productBuy + ", please deposit " + productPrice + " ₽");
+                Double priceBuy = 0.0;
+                for (int i = 0; i < list.size(); i++) {
+                    if (productBuy == list.get(i).getProductName()) priceBuy = list.get(i).getPrice();
+                    lbChoose.setText("Selected product - " + productBuy + ", please deposit " + priceBuy + " ₽");
                 }
             }
         });
@@ -79,13 +77,13 @@ public class MainFrame extends JFrame {
         lbProductName.setFont(mainFont);
 
 
-        formPanel.add(tfMonyeInput);
+        formPanel.add(tfChooseProduct);
         tfProductName = new JTextField();
         tfProductName.setFont(mainFont);
 
 
-        buyApprovement = new JLabel();
-        buyApprovement.setFont(mainFont);
+        lbWelcome = new JLabel();
+        lbWelcome.setFont(mainFont);
 
 
         JButton btnOk = new JButton("Buy product");
@@ -94,20 +92,12 @@ public class MainFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Double byuersMoney = Double.parseDouble(tfMonyeInput.getText());
-                Map<String, Double> prices = HashMap.newHashMap(list.size());
-                for (Product product : list) {
-                    prices.put(product.getProductName(), product.getPrice());
-                }
-                String selectedProduct = (String) popUpList.getSelectedItem();
-                if (Objects.equals(prices.get(selectedProduct), byuersMoney)) {
-                    buyApprovement.setText("Success! Thank you!");
-                } else if (prices.get(selectedProduct) > byuersMoney) {
-                    buyApprovement.setText("Not enough money, try again");
-                } else {
-                    double change = byuersMoney - prices.get(selectedProduct);
-                    buyApprovement.setText("Success! Please don't forget your change " + change + " ₽");
-                }
+
+
+                String firstName = tfProductName.getText();
+                String lastName = tfProductName.getText();
+                lbWelcome.setText("Hello " + firstName + " " + lastName);
+
 
             }
 
@@ -123,8 +113,8 @@ public class MainFrame extends JFrame {
 
                 tfProductName.setText("");
                 tfProductName.setText("");
-                buyApprovement.setText("");
-                lbChoice.setText("");
+                lbWelcome.setText("");
+                lbChoose.setText("");
 
             }
 
@@ -144,7 +134,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(formPanel, BorderLayout.NORTH);
 
 
-        mainPanel.add(buyApprovement, BorderLayout.CENTER);
+        mainPanel.add(lbWelcome, BorderLayout.CENTER);
 
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -159,7 +149,7 @@ public class MainFrame extends JFrame {
 
 
         setTitle("VendingMachines");
-        setSize(700, 600);
+        setSize(500, 600);
         setMaximumSize(new Dimension(300, 400));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
