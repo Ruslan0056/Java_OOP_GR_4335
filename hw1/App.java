@@ -30,9 +30,8 @@ public class App {
        {
            System.out.println(prod.toString());
        }
-
-
-
-       
+    
+       MainFrame mf = new MainFrame();
+       mf.initialize(iMachine.getProducts());
     }
 }
