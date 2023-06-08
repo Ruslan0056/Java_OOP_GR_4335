@@ -26,40 +26,39 @@ public class MainFrame extends JFrame {
         lbBoxList.setFont(mainFont);
         JLabel lbChooseProduct = new JLabel("Choose product");
         lbChooseProduct.setFont(mainFont);
-        JTextField tfChooseProduct = new JTextField();
+        JTextField deposit = new JTextField();
         lbBoxList.setFont(mainFont);
         JLabel blank = new JLabel("");
 
         JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(100, 1, 25, 5));
+        formPanel.setLayout(new GridLayout(15, 1, 25, 5));
         formPanel.add(lbBoxList);
         formPanel.add(blank);
+        
+        // formation of a list of product and print it
         String[] productsList = new String[list.size()];
         
-        //вывод всех товаров
         for (int i = 0; i < list.size(); i++) {
             JLabel lbProductNames = new JLabel(list.get(i).getProductName() + " " + list.get(i).getPrice()+ " ₽", 10);
             lbProductNames.setFont(mainFont);
             formPanel.add(lbProductNames);
         }
         
-
-        
         for (int i = 0; i < list.size(); i++) {
             productsList[i] = list.get(i).getProductName();
         }
-
-        JComboBox popUpList = new JComboBox<>(productsList);
-
-
-
         formPanel.add(blank);
         formPanel.add(lbChooseProduct);
+
+
+        // formation  of a drop-down list
+        JComboBox popUpList = new JComboBox<>(productsList);
         formPanel.add(popUpList);
-        
+                
         JLabel lbChoose = new JLabel();
         lbChoose.setFont(mainFont);
         formPanel.add(lbChoose);
+        
         popUpList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,17 +70,10 @@ public class MainFrame extends JFrame {
                 }
             }
         });
+        
 
-
-        JLabel lbProductName = new JLabel("Product name");
-        lbProductName.setFont(mainFont);
-
-
-        formPanel.add(tfChooseProduct);
-        tfProductName = new JTextField();
-        tfProductName.setFont(mainFont);
-
-
+        // formation of operation buying (deposit, change, etc)
+        formPanel.add(deposit);
         lbWelcome = new JLabel();
         lbWelcome.setFont(mainFont);
 
@@ -92,11 +84,17 @@ public class MainFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                Double priceBuy = 0.0;
+                for (int i = 0; i < list.size(); i++) {
+                    if (popUpList.getSelectedItem() == list.get(i).getProductName()) priceBuy = list.get(i).getPrice();
+                }
+                
+                double dip = Double.parseDouble(deposit.getText());
+                double change = dip - priceBuy;
+                if (priceBuy > dip) lbWelcome.setText("Not enough money!");
+                else if (priceBuy == dip) lbWelcome.setText("Thank you for your purchase!");
+                else lbWelcome.setText("Thank you for your purchase! Please take change " + change + " ₽");
 
-
-                String firstName = tfProductName.getText();
-                String lastName = tfProductName.getText();
-                lbWelcome.setText("Hello " + firstName + " " + lastName);
 
 
             }
@@ -104,6 +102,8 @@ public class MainFrame extends JFrame {
         });
 
 
+
+        // formation of cancel operation 
         JButton btnCancel = new JButton("Cancel");
         btnCancel.setFont(mainFont);
         btnCancel.addActionListener(new ActionListener() {
@@ -111,10 +111,11 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                tfProductName.setText("");
-                tfProductName.setText("");
+                deposit.setText("");
                 lbWelcome.setText("");
                 lbChoose.setText("");
+
+
 
             }
 
@@ -149,7 +150,7 @@ public class MainFrame extends JFrame {
 
 
         setTitle("VendingMachines");
-        setSize(500, 600);
+        setSize(500, 800);
         setMaximumSize(new Dimension(300, 400));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
