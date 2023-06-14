@@ -4,6 +4,7 @@ import java.util.List;
 
 import classes.*;
 
+//some program that reproduces a virtual University, created for the purpose of study "interface"
 public class App {
     public static void main(String[] args) {
        //user u1 = new user("John", "Malkovich", 50);
