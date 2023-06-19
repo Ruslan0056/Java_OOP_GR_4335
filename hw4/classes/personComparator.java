@@ -2,9 +2,10 @@ package classes;
 
 import java.util.Comparator;
 
+
 public class personComparator<T extends user> implements Comparator<T>{
 
-    @Override
+    @Override // for correct data sorting
     public int compare(T o1, T o2) {
         int resultComparing = o1.getFirstName().compareTo(o2.getFirstName());
         if (resultComparing == 0) {
